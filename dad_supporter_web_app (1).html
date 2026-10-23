@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAD Supporter - Giochi per Bambini (IT/EN)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-playful { font-family: 'Comic Neue', cursive; }
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+        .animate-float { animation: float-slow 4s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-amber-50/50 text-slate-800 min-h-screen pb-24">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-amber-100 shadow-sm">
+        <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-tr from-amber-400 to-orange-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-orange-500/20">
+                    <i class="fa-solid fa-child-reaching text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-playful text-xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">DAD Supporter</h1>
+                    <p class="text-xs text-slate-500 font-medium">
+                        👶 <span id="header-ages-label">4 & 2 anni</span> • <span id="current-date-label">Today 08:30</span>
+                    </p>
+                </div>
+            </div>
+            <!-- Settings, Language & WhatsApp Simulator -->
+            <div class="flex items-center space-x-2">
+                <button onclick="openSettingsModal()" class="p-2 bg-amber-100 text-amber-800 rounded-full hover:bg-amber-200 transition" title="Modifica Età Bimbi">
+                    <i class="fa-solid fa-gear text-sm"></i>
+                </button>
+                <button onclick="toggleGlobalLang()" id="lang-btn" class="px-3 py-1.5 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full hover:bg-amber-200 transition shadow-sm">
+                    🌐 <span id="lang-label">IT / EN</span>
+                </button>
+                <button onclick="simulateNotification()" class="p-2 bg-orange-100 text-orange-600 rounded-full hover:bg-orange-200 transition relative" title="Simula WhatsApp Notification">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-2xl mx-auto px-4 pt-4 pb-24">
+
+        <!-- TAB NAVIGATION -->
+        <div class="flex bg-amber-100/60 p-1 rounded-2xl mb-6 shadow-inner">
+            <button onclick="switchTab('today')" id="tab-today" class="flex-1 py-2.5 rounded-xl font-semibold text-sm transition flex items-center justify-center space-x-2 bg-white text-orange-600 shadow-sm">
+                <i class="fa-solid fa-star"></i>
+                <span id="ui-tab-today">Gioco del Giorno</span>
+            </button>
+            <button onclick="switchTab('archive')" id="tab-archive" class="flex-1 py-2.5 rounded-xl font-semibold text-sm transition flex items-center justify-center space-x-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-box-archive"></i>
+                <span id="ui-tab-archive">Archivio (4 Settimane)</span>
+            </button>
+        </div>
+
+        <!-- SECTION: TODAY'S GAME -->
+        <div id="section-today" class="space-y-6">
+            <!-- Game Card -->
+            <div class="bg-white rounded-3xl shadow-xl shadow-orange-500/5 border border-amber-100 overflow-hidden transition-all">
+                
+                <!-- Vivid Illustrative Cartoon Graphic Container -->
+                <div id="game-illustration-container" class="relative aspect-[16/10] sm:aspect-video w-full overflow-hidden bg-gradient-to-br from-sky-400 via-indigo-500 to-purple-600 flex items-center justify-center p-4">
+                    <!-- Dynamic SVG Illustration injected via JavaScript -->
+                    <div id="svg-graphic-wrapper" class="w-full h-full flex items-center justify-center animate-float"></div>
+
+                    <!-- Top Badge overlay -->
+                    <div class="absolute top-3 left-4 bg-black/30 backdrop-blur-md px-3 py-1 rounded-xl text-xs font-semibold text-white flex items-center space-x-1.5 border border-white/20">
+                        <span>✨</span>
+                        <span id="game-date-badge">Oggi • 08:30</span>
+                    </div>
+                </div>
+
+                <!-- Content Details -->
+                <div class="p-6 space-y-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span id="game-tag" class="px-3 py-1 bg-orange-100 text-orange-700 font-semibold text-xs rounded-full uppercase tracking-wider">Motricità & Equilibrio</span>
+                            <h2 id="game-title" class="text-2xl font-bold font-playful text-slate-800 mt-2">Il fiume di cuscini (Pillow River)</h2>
+                        </div>
+                        <button onclick="toggleFavoriteCurrent()" id="fav-btn" class="p-3 rounded-2xl bg-slate-100 text-slate-400 hover:text-red-500 hover:bg-red-50 transition text-lg">
+                            <i class="fa-solid fa-heart"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Metadata Grid -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-amber-50/70 p-3 rounded-2xl border border-amber-100 flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-amber-500 text-white rounded-xl flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-stopwatch"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-medium" id="ui-setup-time">Setup Time</p>
+                                <p class="text-sm font-bold text-slate-800" id="game-time">3 minuti ⏱️</p>
+                            </div>
+                        </div>
+                        <div class="bg-orange-50/70 p-3 rounded-2xl border border-orange-100 flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-orange-500 text-white rounded-xl flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-medium" id="ui-target-age">Target Ages</p>
+                                <p class="text-sm font-bold text-slate-800" id="game-age">4 y & 2 y</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Required Materials -->
+                    <div class="space-y-2">
+                        <h3 class="text-sm font-bold text-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-box-open text-orange-500"></i>
+                            <span id="ui-materials-title">Materiali di casa necessari:</span>
+                        </h3>
+                        <p id="game-materials" class="text-sm text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            Cuscini del divano, cuscini del letto o tappeti di gomma piuma.
+                        </p>
+                    </div>
+
+                    <!-- How to Play -->
+                    <div class="space-y-2">
+                        <h3 class="text-sm font-bold text-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-gamepad text-orange-500"></i>
+                            <span id="ui-how-title">Come si gioca:</span>
+                        </h3>
+                        <p id="game-desc" class="text-sm text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100 leading-relaxed">
+                            Disponi i cuscini sul pavimento del salotto creando un percorso a pietre miliari.
+                        </p>
+                    </div>
+
+                    <!-- Developmental Benefit -->
+                    <div class="space-y-2">
+                        <h3 class="text-sm font-bold text-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-brain text-purple-500"></i>
+                            <span id="ui-benefit-title">Valore evolutivo:</span>
+                        </h3>
+                        <p id="game-benefit" class="text-sm text-purple-900 bg-purple-50/50 p-3 rounded-xl border border-purple-100/50 leading-relaxed">
+                            Sviluppa l'equilibrio, la coordinazione motoria e la cooperazione tra fratelli.
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="pt-2 flex gap-3">
+                        <button onclick="startInteractiveTimer()" class="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold py-3 px-4 rounded-2xl shadow-lg shadow-orange-500/20 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-play"></i>
+                            <span id="ui-start-game">Avvia Timer di Gioco (5 Min)</span>
+                        </button>
+                        <button onclick="generateNewGameForAges()" class="px-4 py-3 bg-amber-100 hover:bg-amber-200 text-amber-800 font-semibold rounded-2xl transition flex items-center justify-center space-x-1" title="Rigenera gioco per queste età">
+                            <i class="fa-solid fa-rotate"></i>
+                            <span class="text-xs hidden sm:inline">Nuovo Gioco</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: ARCHIVE (4 WEEKS) -->
+        <div id="section-archive" class="space-y-4 hidden">
+            <div class="flex items-center justify-between mb-2">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800 font-playful" id="ui-archive-heading">Archivio (Ultime 4 Settimane)</h2>
+                    <p class="text-xs text-slate-500" id="ui-archive-sub">Tutti i giochi precedenti pronti per essere rigiocati.</p>
+                </div>
+                <div class="relative">
+                    <input type="text" id="archive-search" oninput="filterArchive()" placeholder="Cerca gioco..." class="bg-white border border-slate-200 text-xs px-3 py-2 rounded-xl focus:outline-none focus:border-orange-500 w-36 sm:w-48 shadow-sm">
+                </div>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none">
+                <button onclick="filterCategory('all')" id="cat-all" class="px-3 py-1.5 bg-orange-500 text-white text-xs font-semibold rounded-xl whitespace-nowrap shadow-sm">Tutti / All</button>
+                <button onclick="filterCategory('fav')" id="cat-fav" class="px-3 py-1.5 bg-white text-slate-600 text-xs font-semibold rounded-xl whitespace-nowrap border border-slate-200 hover:bg-slate-50">❤️ Preferiti</button>
+                <button onclick="filterCategory('motor')" id="cat-motor" class="px-3 py-1.5 bg-white text-slate-600 text-xs font-semibold rounded-xl whitespace-nowrap border border-slate-200 hover:bg-slate-50">🏃 Motoria</button>
+                <button onclick="filterCategory('focus')" id="cat-focus" class="px-3 py-1.5 bg-white text-slate-600 text-xs font-semibold rounded-xl whitespace-nowrap border border-slate-200 hover:bg-slate-50">🧩 Creativi</button>
+            </div>
+
+            <!-- Archive List -->
+            <div id="archive-list" class="space-y-3">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SETTINGS MODAL: SELECT AGES -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-5">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center text-xl">
+                        👶
+                    </div>
+                    <div>
+                        <h3 class="font-playful font-bold text-xl text-slate-800" id="ui-modal-title">Età dei Bambini</h3>
+                        <p class="text-xs text-slate-500" id="ui-modal-sub">Personalizza l'età per giochi su misura</p>
+                    </div>
+                </div>
+                <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 pt-2">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1" id="ui-child1-label">Età Figlio/a 1 (Anni)</label>
+                    <div class="flex items-center space-x-3">
+                        <input type="range" id="age1-range" min="1" max="8" value="4" oninput="updateAgeInputDisplay()" class="w-full accent-orange-500">
+                        <span id="age1-val" class="w-12 text-center bg-orange-50 text-orange-700 font-bold py-1.5 rounded-xl border border-orange-200 text-sm">4</span>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1" id="ui-child2-label">Età Figlio/a 2 (Anni)</label>
+                    <div class="flex items-center space-x-3">
+                        <input type="range" id="age2-range" min="1" max="8" value="2" oninput="updateAgeInputDisplay()" class="w-full accent-orange-500">
+                        <span id="age2-val" class="w-12 text-center bg-amber-50 text-amber-700 font-bold py-1.5 rounded-xl border border-amber-200 text-sm">2</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-3 flex space-x-3">
+                <button onclick="closeSettingsModal()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-2xl transition">
+                    Annulla
+                </button>
+                <button onclick="saveAndApplyAges()" class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold text-sm rounded-2xl shadow-md shadow-orange-500/20 transition">
+                    Applica e Rigenera Gioco
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME TIMER MODAL -->
+    <div id="timer-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl space-y-6">
+            <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl mx-auto flex items-center justify-center text-3xl">
+                ⏱️
+            </div>
+            <div>
+                <h3 class="font-playful font-bold text-2xl text-slate-800" id="timer-title">Tempo di Gioco!</h3>
+                <p class="text-xs text-slate-500 mt-1" id="timer-subtitle">Divertitevi insieme</p>
+            </div>
+            <!-- Big Countdown Display -->
+            <div class="text-5xl font-extrabold text-orange-600 font-playful tracking-wider py-4 bg-orange-50 rounded-2xl border border-orange-100" id="timer-display">
+                05:00
+            </div>
+            <div class="flex space-x-3">
+                <button onclick="stopTimer()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-2xl transition">
+                    Termina
+                </button>
+                <button onclick="toggleTimerPause()" id="pause-timer-btn" class="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm rounded-2xl transition shadow-md shadow-orange-500/20">
+                    Pausa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION SIMULATOR -->
+    <div id="toast" class="fixed bottom-6 left-4 right-4 max-w-md mx-auto bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 transform translate-y-32 opacity-0 transition-all duration-300 z-50 border border-slate-800">
+        <div class="w-10 h-10 bg-green-500 text-white rounded-xl flex items-center justify-center text-xl flex-shrink-0">
+            <i class="fa-brands fa-whatsapp"></i>
+        </div>
+        <div class="flex-1 overflow-hidden">
+            <p class="text-xs text-green-400 font-semibold flex items-center space-x-1">
+                <span>DAD Supporter Bot</span>
+                <span class="text-[10px] text-slate-400 font-normal">• Adesso</span>
+            </p>
+            <p id="toast-text" class="text-xs text-slate-200 truncate mt-0.5">🔔 Nuova idea di gioco inviata su WhatsApp!</p>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // State
+        let currentLang = 'it';
+        let childAges = { age1: 4, age2: 2 };
+
+        // Game Database with tailored age recommendations & vivid SVG illustrations
+        const gameTemplates = [
+            {
+                id: 'game-1',
+                tagIt: 'Motricità & Equilibrio',
+                tagEng: 'Motor & Balance',
+                titleIt: 'Il fiume di cuscini (Pillow River)',
+                titleEng: 'Pillow River Adventure',
+                timeIt: '3 minuti ⏱️',
+                timeEng: '3 minutes ⏱️',
+                materialsIt: 'Cuscini del divano, cuscini del letto o tappeti.',
+                materialsEng: 'Sofa cushions, bed pillows, or play mats.',
+                descIt: (a1, a2) => `Disponi i cuscini sul pavimento creando un percorso a pietre miliari. Il figlio/a di ${a1} anni salta agilmente senza toccare terra, mentre il piccolo/a di ${a2} anni gattona o cammina tenendoti la mano.`,
+                descEng: (a1, a2) => `Lay cushions on the floor like stepping stones. The ${a1}-year-old hops across without touching the floor, while the ${a2}-year-old crawls or walks holding your hand.`,
+                benefitIt: 'Sviluppa l’equilibrio e la coordinazione motoria.',
+                benefitEng: 'Develops balance and gross motor coordination.',
+                category: 'motor',
+                bgGradient: 'from-amber-400 via-orange-500 to-red-500',
+                svgIllustration: (a1, a2) => `
+                    <svg viewBox="0 0 600 340" class="w-full h-full drop-shadow-lg" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background Room -->
+                        <rect width="600" height="340" fill="url(#roomGrad1)" rx="16"/>
+                        <defs>
+                            <linearGradient id="roomGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#fef3c7"/>
+                                <stop offset="100%" stop-color="#fed7aa"/>
+                            </linearGradient>
+                            <linearGradient id="cushionGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#38bdf8"/>
+                                <stop offset="100%" stop-color="#0284c7"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Rug -->
+                        <ellipse cx="300" cy="270" rx="240" ry="50" fill="#fde68a" opacity="0.6"/>
+                        
+                        <!-- Pillow 1 -->
+                        <g transform="translate(110, 220)">
+                            <ellipse cx="50" cy="20" rx="55" ry="25" fill="#0284c7" opacity="0.2"/>
+                            <rect x="0" y="0" width="100" height="40" rx="16" fill="url(#cushionGrad)" stroke="#bae6fd" stroke-width="3"/>
+                            <text x="50" y="26" font-size="16" text-anchor="middle" fill="#white" font-weight="bold">🛋️</text>
+                        </g>
+                        <!-- Pillow 2 -->
+                        <g transform="translate(250, 200)">
+                            <ellipse cx="50" cy="20" rx="55" ry="25" fill="#0284c7" opacity="0.2"/>
+                            <rect x="0" y="0" width="100" height="40" rx="16" fill="#f43f5e" stroke="#ffe4e6" stroke-width="3"/>
+                            <text x="50" y="26" font-size="16" text-anchor="middle" fill="#white" font-weight="bold">🛋️</text>
+                        </g>
+                        <!-- Pillow 3 -->
+                        <g transform="translate(390, 220)">
+                            <ellipse cx="50" cy="20" rx="55" ry="25" fill="#0284c7" opacity="0.2"/>
+                            <rect x="0" y="0" width="100" height="40" rx="16" fill="#10b981" stroke="#d1fae5" stroke-width="3"/>
+                            <text x="50" y="26" font-size="16" text-anchor="middle" fill="#white" font-weight="bold">🛋️</text>
+                        </g>
+
+                        <!-- Older Child (${a1}y) jumping -->
+                        <g transform="translate(280, 100)">
+                            <circle cx="20" cy="15" r="14" fill="#fb923c"/> <!-- Head -->
+                            <path d="M5,10 Q20,-5 35,10" fill="none" stroke="#b45309" stroke-width="4" stroke-linecap="round"/> <!-- Hair -->
+                            <rect x="10" y="28" width="20" height="30" rx="8" fill="#3b82f6"/> <!-- Body -->
+                            <path d="M5,40 L-10,35" stroke="#fb923c" stroke-width="4" stroke-linecap="round"/> <!-- Arm left -->
+                            <path d="M25,40 L45,30" stroke="#fb923c" stroke-width="4" stroke-linecap="round"/> <!-- Arm right -->
+                            <path d="M14,58 L8,80" stroke="#fb923c" stroke-width="4" stroke-linecap="round"/> <!-- Leg 1 -->
+                            <path d="M22,58 L30,78" stroke="#fb923c" stroke-width="4" stroke-linecap="round"/> <!-- Leg 2 -->
+                            <!-- Age Tag -->
+                            <rect x="-10" y="-18" width="60" height="20" rx="6" fill="#1e293b"/>
+                            <text x="20" y="-4" font-size="11" fill="white" font-weight="bold" text-anchor="middle">${a1} anni</text>
+                        </g>
+
+                        <!-- Younger Child (${a2}y) crawling/walking -->
+                        <g transform="translate(130, 160)">
+                            <circle cx="15" cy="15" r="12" fill="#f472b6"/> <!-- Head -->
+                            <rect x="8" y="26" width="26" height="20" rx="8" fill="#a855f7"/> <!-- Body -->
+                            <path d="M12,45 L5,60" stroke="#f472b6" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M30,45 L38,58" stroke="#f472b6" stroke-width="4" stroke-linecap="round"/>
+                            <!-- Age Tag -->
+                            <rect x="-5" y="-14" width="55" height="20" rx="6" fill="#1e293b"/>
+                            <text x="22" y="0" font-size="11" fill="white" font-weight="bold" text-anchor="middle">${a2} anni</text>
+                        </g>
+                    </svg>
+                `
+            },
+            {
+                id: 'game-2',
+                tagIt: 'Travasi & Sensoriale',
+                tagEng: 'Sensory & Pouring',
+                titleIt: 'La piscina di pasta secca (Pasta Pool)',
+                titleEng: 'Dry Pasta Sensory Pool',
+                timeIt: '3 minuti ⏱️',
+                timeEng: '3 minutes ⏱️',
+                materialsIt: 'Scatola grande, pasta corta, cucchiai e bicchieri di plastica.',
+                materialsEng: 'Large box, dry pasta, plastic spoons and cups.',
+                descIt: (a1, a2) => `Metti la pasta nella scatola. Il bimbo/a di ${a1} anni si diverte a travasare con imbuti e misurini, mentre il piccolo/a di ${a2} anni sperimenta la consistenza facendo scorrere la pasta tra le mani.`,
+                descEng: (a1, a2) => `Put pasta in the box. The ${a1}-year-old pours using funnels and cups, while the ${a2}-year-old explores the tactile texture by scooping with hands.`,
+                benefitIt: 'Stimola la motricità fine e la concentrazione.',
+                benefitEng: 'Stimulates fine motor skills and tactile focus.',
+                category: 'focus',
+                bgGradient: 'from-purple-500 via-indigo-600 to-blue-600',
+                svgIllustration: (a1, a2) => `
+                    <svg viewBox="0 0 600 340" class="w-full h-full drop-shadow-lg" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="600" height="340" fill="url(#roomGrad2)" rx="16"/>
+                        <defs>
+                            <linearGradient id="roomGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f3e8ff"/>
+                                <stop offset="100%" stop-color="#e0e7ff"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Sensory Box / Tub -->
+                        <path d="M120,160 L180,290 L420,290 L480,160 Z" fill="#c084fc" opacity="0.3"/>
+                        <rect x="100" y="140" width="400" height="30" rx="10" fill="#9333ea"/>
+                        <ellipse cx="300" cy="220" rx="170" ry="55" fill="#f59e0b" opacity="0.8"/>
+                        <!-- Pasta pieces symbols -->
+                        <text x="220" y="210" font-size="24">🍝</text>
+                        <text x="280" y="240" font-size="24">🍜</text>
+                        <text x="350" y="210" font-size="24">🍝</text>
+                        
+                        <!-- Child 1 (${a1}y) pouring -->
+                        <g transform="translate(360, 90)">
+                            <circle cx="15" cy="15" r="14" fill="#fb923c"/>
+                            <rect x="8" y="28" width="22" height="32" rx="8" fill="#ec4899"/>
+                            <path d="M20,40 L-10,30" stroke="#fb923c" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="-25" y="20" width="18" height="22" rx="4" fill="#38bdf8"/> <!-- Cup -->
+                            <rect x="-10" y="-16" width="55" height="20" rx="6" fill="#1e293b"/>
+                            <text x="17" y="-2" font-size="11" fill="white" font-weight="bold" text-anchor="middle">${a1} anni</text>
+                        </g>
+
+                        <!-- Child 2 (${a2}y) playing -->
+                        <g transform="translate(150, 110)">
+                            <circle cx="15" cy="15" r="13" fill="#f472b6"/>
+                            <rect x="8" y="26" width="20" height="28" rx="8" fill="#3b82f6"/>
+                            <path d="M12,40 L30,45" stroke="#f472b6" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="-10" y="-16" width="55" height="20" rx="6" fill="#1e293b"/>
+                            <text x="17" y="-2" font-size="11" fill="white" font-weight="bold" text-anchor="middle">${a2} anni</text>
+                        </g>
+                    </svg>
+                `
+            },
+            {
+                id: 'game-3',
+                tagIt: 'Immaginazione & Tenda',
+                tagEng: 'Imagination & Fort',
+                titleIt: 'La caverna segreta sotto il tavolo',
+                titleEng: 'Secret Table Cave Hideout',
+                timeIt: '4 minuti ⏱️',
+                timeEng: '4 minutes ⏱️',
+                materialsIt: 'Tavolo da pranzo e 2 o 3 lenzuola grandi.',
+                materialsEng: 'Dining table and 2-3 large bed sheets.',
+                descIt: (a1, a2) => `Copri il tavolo con le lenzuola per creare una tenda. Il bimbo/a di ${a1} anni guida la narrazione inventando storie, mentre il piccolo/a di ${a2} anni si diverte a esplorare il rifugio con una torcia.`,
+                descEng: (a1, a2) => `Drape sheets over the table to make a tent. The ${a1}-year-old leads the storytelling, while the ${a2}-year-old explores the cozy hideout with a flashlight.`,
+                benefitIt: 'Incoraggia il gioco di ruolo e la condivisione.',
+                benefitEng: 'Encourages role play and shared bonding.',
+                category: 'focus',
+                bgGradient: 'from-blue-600 via-indigo-700 to-slate-900',
+                svgIllustration: (a1, a2) => `
+                    <svg viewBox="0 0 600 340" class="w-full h-full drop-shadow-lg" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="600" height="340" fill="url(#roomGrad3)" rx="16"/>
+                        <defs>
+                            <linearGradient id="roomGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#1e1b4b"/>
+                                <stop offset="100%" stop-color="#312e81"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Table Tent Shape -->
+                        <polygon points="80,280 300,90 520,280" fill="#3b82f6" opacity="0.9"/>
+                        <polygon points="120,280 300,120 480,280" fill="#1e1b4b"/>
+                        
+                        <!-- Glowing Flashlight Beam inside -->
+                        <path d="M300,200 L200,290 L400,290 Z" fill="#fde047" opacity="0.4"/>
+
+                        <!-- Child 1 (${a1}y) -->
+                        <g transform="translate(220, 200)">
+                            <circle cx="15" cy="15" r="13" fill="#fb923c"/>
+                            <rect x="8" y="26" width="20" height="25" rx="8" fill="#f43f5e"/>
+                            <rect x="-10" y="-16" width="55" height="20" rx="6" fill="#0f172a"/>
+                            <text x="17" y="-2" font-size="11" fill="white" font-weight="bold" text-anchor="middle">${a1} anni</text>
+                        </g>
+
+                        <!-- Child 2 (${a2}y) -->
+                        <g transform="translate(340, 210)">
+                            <circle cx="15" cy="15" r="12" fill="#f472b6"/>
+                            <rect x="8" y="26" width="18" height="24" rx="8" fill="#10b981"/>
+                            <rect x="-10" y="-16" width="55" height="20" rx="6" fill="#0f172a"/>
+                            <text x="17" y="-2" font-size="11" fill="white" font-weight="bold" text-anchor="middle">${a2} anni</text>
+                        </g>
+                        
+                        <!-- Stars -->
+                        <text x="100" y="80" font-size="20">✨</text>
+                        <text x="480" y="90" font-size="20">⭐</text>
+                    </svg>
+                `
+            },
+            {
+                id: 'game-4',
+                tagIt: 'Coordinazione & Tiro',
+                tagEng: 'Aim & Bowling',
+                titleIt: 'Bowling con bottiglie d’acqua',
+                titleEng: 'Water Bottle Bowling',
+                timeIt: '3 minuti ⏱️',
+                timeEng: '3 minutes ⏱️',
+                materialsIt: 'Bottiglie di plastica vuote e una pallina morbida.',
+                materialsEng: 'Empty plastic water bottles and a soft ball.',
+                descIt: (a1, a2) => `Allinea le bottiglie in corridoio. Il bimbo/a di ${a1} anni tira da distanza maggiore per fare strike, mentre il piccolo/a di ${a2} anni lancia da distanza ravvicinata ridendo.`,
+                descEng: (a1, a2) => `Line up bottles in the hallway. The ${a1}-year-old rolls from afar to score strikes, while the ${a2}-year-old bowls from close up for an easy win.`,
+                benefitIt: 'Migliora la mira e la coordinazione oculo-manuale.',
+                benefitEng: 'Improves aiming and hand-eye coordination.',
+                category: 'motor',
+                bgGradient: 'from-teal-500 via-emerald-600 to-green-700',
+                svgIllustration: (a1, a2) => `
+                    <svg viewBox="0 0 600 340" class="w-full h-full drop-shadow-lg" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="600" height="340" fill="url(#roomGrad4)" rx="16"/>
+                        <defs>
+                            <linearGradient id="roomGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ecfdf5"/>
+                                <stop offset="100%" stop-color="#d1fae5"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Bowling Pins -->
+                        <g transform="translate(420, 160)">
+                            <rect x="0" y="0" width="16" height="45" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                            <rect x="25" y="10" width="16" height="45" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                            <rect x="12" y="45" width="16" height="45" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+                        </g>
+
+                        <!-- Rolling Ball -->
+                        <circle cx="280" cy="220" r="18" fill="#ef4444"/>
+
+                        <!-- Child 1 (${a1}y) bowling -->
+                        <g transform="translate(130, 140)">
+                            <circle cx="15" cy="15" r="14" fill="#fb923c"/>
+                            <rect x="8" y="28" width="22" height="30" rx="8" fill="#6366f1"/>
+                            <path d="M20,40 L45,50" stroke="#fb923c" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="-10" y="-16" width="55" height="20" rx="6" fill="#1e293b"/>
+                            <text x="17" y="-2" font-size="11" fill="white" font-weight="bold" text-anchor="middle">${a1} anni</text>
+                        </g>
+
+                        <!-- Child 2 (${a2}y) cheering -->
+                        <g transform="translate(230, 150)">
+                            <circle cx="15" cy="15" r="12" fill="#f472b6"/>
+                            <rect x="8" y="26" width="18" height="26" rx="8" fill="#f59e0b"/>
+                            <path d="M5,35 L-5,25" stroke="#f472b6" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M25,35 L35,25" stroke="#f472b6" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="-10" y="-16" width="55" height="20" rx="6" fill="#1e293b"/>
+                            <text x="17" y="-2" font-size="11" fill="white" font-weight="bold" text-anchor="middle">${a2} anni</text>
+                        </g>
+                    </svg>
+                `
+            }
+        ];
+
+        let todayGame = {
+            favorite: false,
+            templateIndex: 0
+        };
+
+        let archiveGames = [];
+
+        function initStorage() {
+            const savedAges = localStorage.getItem('dad_child_ages');
+            if (savedAges) childAges = JSON.parse(savedAges);
+
+            const savedToday = localStorage.getItem('dad_today_game_state');
+            if (savedToday) {
+                todayGame = JSON.parse(savedToday);
+            } else {
+                generateNewGameForAges(false);
+            }
+
+            const savedArchive = localStorage.getItem('dad_archive_games');
+            if (savedArchive) {
+                try { archiveGames = JSON.parse(savedArchive); } catch(e) {}
+            } else {
+                archiveGames = [
+                    { id: 'arc-1', dateIt: 'Martedì, 20 Ott', dateEng: 'Tue, Oct 20', tagIt: 'Sensoriale', tagEng: 'Sensory', titleIt: 'Piscina di pasta', titleEng: 'Pasta Pool', materialsIt: 'Scatola e pasta', materialsEng: 'Box & pasta', favorite: true, category: 'focus' },
+                    { id: 'arc-2', dateIt: 'Lunedì, 19 Ott', dateEng: 'Mon, Oct 19', tagIt: 'Motoria', tagEng: 'Motor', titleIt: 'Bowling casalingo', titleEng: 'Home Bowling', materialsIt: 'Bottiglie e palla', materialsEng: 'Bottles & ball', favorite: false, category: 'motor' }
+                ];
+            }
+        }
+
+        function saveStorage() {
+            localStorage.setItem('dad_child_ages', JSON.stringify(childAges));
+            localStorage.setItem('dad_today_game_state', JSON.stringify(todayGame));
+            localStorage.setItem('dad_archive_games', JSON.stringify(archiveGames));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initStorage();
+            updateUILabels();
+            renderTodayGame();
+            renderArchiveList();
+        });
+
+        function toggleGlobalLang() {
+            currentLang = currentLang === 'it' ? 'en' : 'it';
+            updateUILabels();
+            renderTodayGame();
+            renderArchiveList();
+        }
+
+        function updateUILabels() {
+            const isIt = currentLang === 'it';
+            document.getElementById('lang-label').innerText = currentLang.toUpperCase();
+            document.getElementById('header-ages-label').innerText = `${childAges.age1} & ${childAges.age2} ${isIt ? 'anni' : 'years'}`;
+            document.getElementById('current-date-label').innerText = isIt ? 'Oggi 08:30' : 'Today 08:30';
+            document.getElementById('ui-tab-today').innerText = isIt ? 'Gioco del Giorno' : 'Daily Game';
+            document.getElementById('ui-tab-archive').innerText = isIt ? 'Archivio (4 Settimane)' : 'Archive (4 Weeks)';
+            document.getElementById('ui-setup-time').innerText = isIt ? 'Tempo di Setup' : 'Setup Time';
+            document.getElementById('ui-target-age').innerText = isIt ? 'Età Bimbi' : 'Child Ages';
+            document.getElementById('ui-materials-title').innerText = isIt ? 'Materiali di casa necessari:' : 'Required Materials:';
+            document.getElementById('ui-how-title').innerText = isIt ? 'Come si gioca:' : 'How to Play:';
+            document.getElementById('ui-benefit-title').innerText = isIt ? 'Valore evolutivo:' : 'Developmental Benefit:';
+            document.getElementById('ui-start-game').innerText = isIt ? 'Avvia Timer di Gioco (5 Min)' : 'Start Game Timer (5 Min)';
+            document.getElementById('ui-archive-heading').innerText = isIt ? 'Archivio (Ultime 4 Settimane)' : 'Archive (Past 4 Weeks)';
+            document.getElementById('ui-archive-sub').innerText = isIt ? 'Tutti i giochi precedenti pronti per essere rigiocati.' : 'All past games ready to replay anytime.';
+            document.getElementById('ui-modal-title').innerText = isIt ? 'Età dei Bambini' : 'Children Ages';
+            document.getElementById('ui-modal-sub').innerText = isIt ? 'Personalizza l’età per giochi su misura' : 'Customize ages for tailored games';
+            document.getElementById('ui-child1-label').innerText = isIt ? 'Età Figlio/a 1 (Anni)' : 'Child 1 Age (Years)';
+            document.getElementById('ui-child2-label').innerText = isIt ? 'Età Figlio/a 2 (Anni)' : 'Child 2 Age (Years)';
+        }
+
+        function renderTodayGame() {
+            const isIt = currentLang === 'it';
+            const template = gameTemplates[todayGame.templateIndex % gameTemplates.length];
+
+            document.getElementById('game-date-badge').innerText = isIt ? '📅 Oggi • 08:30' : '📅 Today • 08:30';
+            document.getElementById('game-tag').innerText = isIt ? template.tagIt : template.tagEng;
+            document.getElementById('game-title').innerText = isIt ? template.titleIt : template.titleEng;
+            document.getElementById('game-time').innerText = isIt ? template.timeIt : template.timeEng;
+            document.getElementById('game-age').innerText = `${childAges.age1} y & ${childAges.age2} y`;
+            document.getElementById('game-materials').innerText = isIt ? template.materialsIt : template.materialsEng;
+            document.getElementById('game-desc').innerText = isIt ? template.descIt(childAges.age1, childAges.age2) : template.descEng(childAges.age1, childAges.age2);
+            document.getElementById('game-benefit').innerText = isIt ? template.benefitIt : template.benefitEng;
+
+            // Update container background & inject SVG cartoon graphic
+            const container = document.getElementById('game-illustration-container');
+            container.className = `relative aspect-[16/10] sm:aspect-video w-full overflow-hidden bg-gradient-to-br ${template.bgGradient} flex items-center justify-center p-4`;
+            
+            document.getElementById('svg-graphic-wrapper').innerHTML = template.svgIllustration(childAges.age1, childAges.age2);
+
+            const favBtn = document.getElementById('fav-btn');
+            favBtn.className = todayGame.favorite ? 
+                "p-3 rounded-2xl bg-red-50 text-red-500 transition text-lg shadow-sm" : 
+                "p-3 rounded-2xl bg-slate-100 text-slate-400 hover:text-red-500 hover:bg-red-50 transition text-lg";
+        }
+
+        function generateNewGameForAges(notify = true) {
+            todayGame.templateIndex = Math.floor(Math.random() * gameTemplates.length);
+            todayGame.favorite = false;
+            saveStorage();
+            renderTodayGame();
+            if (notify) {
+                showToast(currentLang === 'it' ? `✨ Nuovo gioco generato per ${childAges.age1} e ${childAges.age2} anni!` : `✨ New game generated for ${childAges.age1} & ${childAges.age2} years!`);
+            }
+        }
+
+        // Settings Modal for Ages
+        function openSettingsModal() {
+            document.getElementById('age1-range').value = childAges.age1;
+            document.getElementById('age2-range').value = childAges.age2;
+            updateAgeInputDisplay();
+            document.getElementById('settings-modal').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function updateAgeInputDisplay() {
+            const v1 = document.getElementById('age1-range').value;
+            const v2 = document.getElementById('age2-range').value;
+            document.getElementById('age1-val').innerText = v1;
+            document.getElementById('age2-val').innerText = v2;
+        }
+
+        function saveAndApplyAges() {
+            childAges.age1 = parseInt(document.getElementById('age1-range').value);
+            childAges.age2 = parseInt(document.getElementById('age2-range').value);
+            saveStorage();
+            updateUILabels();
+            closeSettingsModal();
+            generateNewGameForAges(false);
+            showToast(currentLang === 'it' ? `👶 Età aggiornate a ${childAges.age1} e ${childAges.age2} anni!` : `👶 Ages updated to ${childAges.age1} & ${childAges.age2} years!`);
+        }
+
+        // Tab Switching
+        function switchTab(tabName) {
+            const btnToday = document.getElementById('tab-today');
+            const btnArchive = document.getElementById('tab-archive');
+            const secToday = document.getElementById('section-today');
+            const secArchive = document.getElementById('section-archive');
+
+            if (tabName === 'today') {
+                btnToday.className = "flex-1 py-2.5 rounded-xl font-semibold text-sm transition flex items-center justify-center space-x-2 bg-white text-orange-600 shadow-sm";
+                btnArchive.className = "flex-1 py-2.5 rounded-xl font-semibold text-sm transition flex items-center justify-center space-x-2 text-slate-600 hover:text-slate-900";
+                secToday.classList.remove('hidden');
+                secArchive.classList.add('hidden');
+            } else {
+                btnArchive.className = "flex-1 py-2.5 rounded-xl font-semibold text-sm transition flex items-center justify-center space-x-2 bg-white text-orange-600 shadow-sm";
+                btnToday.className = "flex-1 py-2.5 rounded-xl font-semibold text-sm transition flex items-center justify-center space-x-2 text-slate-600 hover:text-slate-900";
+                secArchive.classList.remove('hidden');
+                secToday.classList.add('hidden');
+            }
+        }
+
+        // Archive List & Filtering
+        let currentFilter = 'all';
+        function renderArchiveList(query = '') {
+            const listEl = document.getElementById('archive-list');
+            listEl.innerHTML = '';
+
+            const filtered = archiveGames.filter(g => {
+                const matchQ = (g.titleIt + g.titleEng + g.materialsIt).toLowerCase().includes(query.toLowerCase());
+                if (!matchQ) return false;
+                if (currentFilter === 'fav') return g.favorite;
+                if (currentFilter === 'motor') return g.category === 'motor';
+                if (currentFilter === 'focus') return g.category === 'focus';
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<div class="p-8 text-center bg-white rounded-2xl border border-slate-100 text-slate-400 text-sm">Nessun gioco trovato in archivio.</div>`;
+                return;
+            }
+
+            filtered.forEach(g => {
+                const isIt = currentLang === 'it';
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between hover:border-amber-200 transition";
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3 overflow-hidden">
+                        <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                            ✨
+                        </div>
+                        <div class="overflow-hidden">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-[10px] font-semibold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-md">${isIt ? g.tagIt : g.tagEng}</span>
+                                <span class="text-[11px] text-slate-400">${isIt ? g.dateIt : g.dateEng}</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm truncate mt-0.5">${isIt ? g.titleIt : g.titleEng}</h4>
+                            <p class="text-xs text-slate-500 truncate">${isIt ? g.materialsIt : g.materialsEng}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+                        <button onclick="toggleFavArchive('${g.id}')" class="p-2 text-slate-300 hover:text-red-500 transition">
+                            <i class="fa-${g.favorite ? 'solid text-red-500' : 'regular'} fa-heart"></i>
+                        </button>
+                        <button onclick="loadGameFromArchive('${g.id}')" class="p-2.5 bg-orange-50 hover:bg-orange-100 text-orange-600 rounded-xl transition text-xs font-semibold flex items-center space-x-1">
+                            <i class="fa-solid fa-play"></i>
+                            <span class="hidden sm:inline">Rigioca</span>
+                        </button>
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        function filterCategory(cat) {
+            currentFilter = cat;
+            ['all', 'fav', 'motor', 'focus'].forEach(c => {
+                const btn = document.getElementById(`cat-${c}`);
+                btn.className = c === cat ? 
+                    "px-3 py-1.5 bg-orange-500 text-white text-xs font-semibold rounded-xl whitespace-nowrap shadow-sm" : 
+                    "px-3 py-1.5 bg-white text-slate-600 text-xs font-semibold rounded-xl whitespace-nowrap border border-slate-200 hover:bg-slate-50";
+            });
+            renderArchiveList(document.getElementById('archive-search').value);
+        }
+
+        function filterArchive() {
+            renderArchiveList(document.getElementById('archive-search').value);
+        }
+
+        function toggleFavArchive(id) {
+            const g = archiveGames.find(item => item.id === id);
+            if (g) {
+                g.favorite = !g.favorite;
+                saveStorage();
+                renderArchiveList(document.getElementById('archive-search').value);
+            }
+        }
+
+        function loadGameFromArchive(id) {
+            switchTab('today');
+            showToast(currentLang === 'it' ? `✨ Gioco caricato con successo!` : `✨ Game loaded successfully!`);
+        }
+
+        // Interactive Timer
+        let timerInterval = null;
+        let timeLeft = 300;
+        let isPaused = false;
+
+        function startInteractiveTimer() {
+            document.getElementById('timer-modal').classList.remove('hidden');
+            timeLeft = 300;
+            isPaused = false;
+            document.getElementById('pause-timer-btn').innerText = currentLang === 'it' ? 'Pausa' : 'Pause';
+            updateTimerDisplay();
+            if (timerInterval) clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+                if (!isPaused) {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        stopTimer();
+                        showToast(currentLang === 'it' ? '🎉 Tempo scaduto! Bravi bimbi!' : '🎉 Time is up! Great job!');
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            document.getElementById('timer-display').innerText = `${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
+        }
+
+        function toggleTimerPause() {
+            isPaused = !isPaused;
+            document.getElementById('pause-timer-btn').innerText = isPaused ? (currentLang === 'it' ? 'Riprendi' : 'Resume') : (currentLang === 'it' ? 'Pausa' : 'Pause');
+        }
+
+        function stopTimer() {
+            document.getElementById('timer-modal').classList.add('hidden');
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        // WhatsApp Notification Simulator
+        function simulateNotification() {
+            showToast(currentLang === 'it' ? `📲 WhatsApp 08:30: "Nuovo gioco pronto per ${childAges.age1} e ${childAges.age2} anni!"` : `📲 WhatsApp 08:30: "New game ready for ${childAges.age1} & ${childAges.age2}yo!"`);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = msg;
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
