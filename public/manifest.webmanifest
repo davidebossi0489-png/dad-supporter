@@ -1,0 +1,12 @@
+{
+  "name": "Parents Supporter",
+  "short_name": "Parents Supporter",
+  "description": "Every day a simple game to play with your children.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f7f5",
+  "theme_color": "#2f6f66",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
